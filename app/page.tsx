@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { client } from "@/sanity/lib/client";
+import { ModeToggle } from "@/components/mode-toggle"
 
 // 1. Viết câu thần chú (Query) để gọi dữ liệu về
 // Lấy _id, title, slug, ngày đăng. Sắp xếp bài mới nhất lên đầu.
@@ -36,7 +37,7 @@ export default async function Home() {
       <h1 className="text-4xl font-bold mb-8 text-center text-blue-600">
         Blog Của Thằng Dev Ngu
       </h1>
-
+      <ModeToggle />
       <div className="grid gap-5">
         {posts.length > 0 ? (
           posts.map((post) => (
