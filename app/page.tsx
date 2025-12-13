@@ -33,26 +33,28 @@ export default async function Home() {
   console.log("Đã lấy được:", posts.length, "bài viết");
 
   return (
-    <main className="max-w-4xl mx-auto p-5">
-      <h1 className="text-4xl font-bold mb-8 text-center text-blue-600">
-        Blog Của Thằng Dev Ngu
-      </h1>
-      <ModeToggle />
+    <main className="min-h-screen max-w-4xl mx-auto p-5 bg-background text-foreground transition-colors">
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-4xl font-bold text-primary">
+          Blog Của Thằng Dev Ngu
+        </h1>
+        <ModeToggle />
+      </div>
       <div className="grid gap-5">
         {posts.length > 0 ? (
           posts.map((post) => (
             <Link
               key={post._id}
               href={`/blog/${post.slug.current}`}
-              className="block p-6 border rounded-lg shadow hover:shadow-lg transition bg-white dark:bg-gray-800 dark:border-gray-700"
+              className="block p-6 border rounded-lg shadow hover:shadow-lg transition-colors bg-card text-card-foreground"
             >
-              <h2 className="text-2xl font-bold mb-2 text-gray-800 dark:text-white">
+              <h2 className="text-2xl font-bold mb-2">
                 {post.title}
               </h2>
-              <p className="text-gray-500 text-sm mb-4">
+              <p className="text-muted-foreground text-sm mb-4">
                 {new Date(post.publishedAt).toLocaleDateString("vi-VN")}
               </p>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-muted-foreground">
                 {post.summary || "Đéo có tóm tắt, bấm vào mà đọc..."}
               </p>
             </Link>

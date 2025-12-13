@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export function ModeToggle() {
-  const { theme, setTheme } = useTheme()
+  const { theme, resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
   // Chờ client mount để tránh lỗi hydration
@@ -21,6 +21,15 @@ export function ModeToggle() {
     const timeout = setTimeout(() => setMounted(true), 0)
     return () => clearTimeout(timeout)
   }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+    const root = window.document.documentElement
+    const nextTheme = theme === "system" ? resolvedTheme : theme
+    if (!nextTheme) return
+    root.classList.remove("light", "dark")
+    root.classList.add(nextTheme)
+  }, [theme, resolvedTheme, mounted])
 
   if (!mounted) {
     return (
@@ -30,10 +39,12 @@ export function ModeToggle() {
     )
   }
 
+  const currentTheme = theme === "system" ? resolvedTheme : theme
+
   const icon =
-    theme === "dark" ? (
+    currentTheme === "dark" ? (
       <Moon className="h-5 w-5" />
-    ) : theme === "light" ? (
+    ) : currentTheme === "light" ? (
       <Sun className="h-5 w-5" />
     ) : (
       <Laptop className="h-5 w-5" />
@@ -47,15 +58,24 @@ export function ModeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
+        <DropdownMenuItem
+          onClick={() => setTheme("light")}
+          data-state={currentTheme === "light" ? "checked" : "unchecked"}
+        >
           <Sun className="mr-2 h-4 w-4" />
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
+        <DropdownMenuItem
+          onClick={() => setTheme("dark")}
+          data-state={currentTheme === "dark" ? "checked" : "unchecked"}
+        >
           <Moon className="mr-2 h-4 w-4" />
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
+        <DropdownMenuItem
+          onClick={() => setTheme("system")}
+          data-state={theme === "system" ? "checked" : "unchecked"}
+        >
           <Laptop className="mr-2 h-4 w-4" />
           System
         </DropdownMenuItem>
